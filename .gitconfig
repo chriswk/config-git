@@ -1,0 +1,77 @@
+[user]
+	name = chrkolst
+        email = christopher.kolstad@finn.no
+[core]
+        excludesfile = /Users/chrkolst/.gitignore_global
+        autocrlf = input
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+[alias]
+        ci = commit -a
+        co = checkout
+	st = status -sb
+        buildstatus = !ruby ~/.git/parsebamboo.rb `git config bamboo.projectname` `git config finn.bamboo.user.name` `git config finn.bamboo.user.password`
+        safepull = !git buildstatus && git pull
+		safepush = !git buildstatus && git push
+		sup = !git buildstatus && git supforce
+        sco = !git buildstatus && git scoforce
+        supforce = !touch placeholder && git add placeholder && git stash -u && git-svn fetch && git-svn rebase && git stash pop && git reset -q placeholder && rm placeholder && git st
+        scoforce = !touch placeholder && git add placeholder && git stash -u && git-svn dcommit && git stash pop && git reset -q placeholder && rm placeholder && git st
+        spull = !git-svn fetch && git-svn rebase
+        spush = !git-svn dcommit
+        loglive = !loglive
+	s = status
+	alol = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --all
+	standup = log --since yesterday --author chrkolst
+	ready = rebase -i @{u}
+	ignored = ls-files --others --i --exclude-standard
+	wipe = reset --hard HEAD
+	lol = log --oneline --graph --decorate --all
+	goodlol = log --follow --graph --abbrev=4 --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %Cgreen%ai %n %C(bold blue)%aN%Creset %B'
+	spop = stash pop
+	backOne = reset --hard HEAD~1
+	amend = commit --amend
+[color]
+        branch = auto
+        diff = auto
+        status = auto
+
+[color "branch"]
+        current = yellow reverse
+        local = yellow
+        remote = green
+
+[color "diff"]
+        meta = yellow bold
+        frag = magenta bold
+        old = red bold
+        new = green bold
+
+[color "status"]
+        added = yellow
+        changed = green
+        untracked = cyan
+[merge]
+        tool = diffmerge
+[mergetool "diffmerge"]
+        cmd = diffmerge --merge --result=$MERGED $LOCAL $BASE $REMOTE
+        trustExitCode = true
+[diff]
+        tool = diffmerge
+[difftool "diffmerge"]
+        cmd = diffmerge $LOCAL $REMOTE
+[http]
+        sslverify = false
+[push]
+	default = upstream
+[finn "bamboo.user"]
+        name = chrkolst
+        password = eDAvWR3D
+[mergetool]
+	keepBackup = false
+[branch]
+	autosetuprebase = always
